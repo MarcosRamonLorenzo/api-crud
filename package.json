@@ -1,0 +1,27 @@
+{
+  "name": "api-crud",
+  "version": "1.0.0",
+  "description": "Proyecto de API RESTful con Node.js y Express para SD",
+  "keywords": [
+    "CRUD",
+    "REST",
+    "node",
+    "express",
+    "mongo"
+  ],
+  "homepage": "https://github.com/MarcosRamonLorenzo/api-crud#readme",
+  "bugs": {
+    "url": "https://github.com/MarcosRamonLorenzo/api-crud/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarcosRamonLorenzo/api-crud.git"
+  },
+  "license": "ISC",
+  "author": "Marcos Ramón Lorenzo",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

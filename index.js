@@ -1,16 +1,16 @@
-const http = require("http");
-const server = http.createServer();
+"use strict";
+const express = require("express");
 
-function HTTP_Response(request, response) {
+const app = express();
 
-  response.writeHead(200, { "Content-Type": "text/plain" });
+app.get("/hola", (request, response) => {
 
-  response.write("Hola a todas y a todos!\n");
-  response.end();
+  response.send("Hola a todas y a todos desde Express!");
+
+});
+
+app.listen(8080, () => {
+
+  console.log("API REST ejecutándose en http://localhost:8080/hola");
   
-}
-server.on("request", HTTP_Response);
-
-server.listen(8080);
-
-console.log("Servidor ejecutándose en puerto 8080...");
+});

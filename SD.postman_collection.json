@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "1f300990-697a-4d1e-afb6-ed77a748bfa5",
-		"name": "My Collection",
+		"name": "API RESTFul",
 		"description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "51888349",
@@ -9,7 +9,7 @@
 	},
 	"item": [
 		{
-			"name": "GetAll",
+			"name": "/api/{coleccion}",
 			"event": [
 				{
 					"listen": "test",
@@ -45,7 +45,7 @@
 			"response": []
 		},
 		{
-			"name": "GetID",
+			"name": "/api/{coleccion}/{id}",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -66,7 +66,7 @@
 			"response": []
 		},
 		{
-			"name": "POST",
+			"name": "/api/{coleccion}",
 			"event": [
 				{
 					"listen": "test",
@@ -128,7 +128,7 @@
 			"response": []
 		},
 		{
-			"name": "PUT",
+			"name": "/api/{coleccion}/{id}",
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -159,7 +159,7 @@
 			"response": []
 		},
 		{
-			"name": "DELETE",
+			"name": "/api/{coleccion}/{id}",
 			"request": {
 				"method": "DELETE",
 				"header": [],

@@ -1,59 +1,100 @@
-"use strict";
+'use strict';
 
-const port = process.env.PORT || 3000;
-
-const express = require("express");
-const logger = require("morgan");
+// --- Declaraciones y Configuración ---
+const express = require('express');
+const logger = require('morgan');
+const mongojs = require('mongojs');
 
 const app = express();
+const port = process.env.PORT || 3000;
 
-// Declaramos los middleware
-app.use(logger("dev")); // probar con: tiny, short, dev, common, combined
+// Configuración de Base de Datos (Base de datos: "SD")
+var db = mongojs("mongodb://127.0.0.1:27017/SD");
+const id = mongojs.ObjectID; 
 
-//Middleware para interpetar HTTP request.
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+// --- Middlewares ---
+app.use(logger('dev')); 
+app.use(express.urlencoded({ extended: false })); 
+app.use(express.json()); 
 
-// Implementamos el API RESTFul a través de los métodos
-app.get("/api/product", (req, res) => {
-  res.status(200);
-  res.send({ productos: [] });
+
+app.param("coleccion", (req, res, next, coleccion) => {
+    console.log('Middleware param /api/:coleccion ->', coleccion);
+    req.collection = db.collection(coleccion);
+    return next();
 });
 
-app.get("/api/product/:productID", (req, res) => {
-  const productID = req.params.productID;
+// --- Rutas de la API ---
 
-  res.status(200);
-  res.send({ producto: productID });
+// 1. Listar todas las colecciones disponibles
+app.get('/api', (req, res, next) => {
+    db.getCollectionNames((err, colecciones) => {
+        if (err) return next(err);
+        res.json(colecciones);
+    });
 });
 
-app.post("/api/product", (req, res) => {
-  
-const product = req.body;
-
-  console.log(product);
-
-  res.status(200);
-
-  res.send({ mensaje: "Producto creado", producto: product,});
+// 2. Listar todos los elementos de una colección
+app.get('/api/:coleccion', (req, res, next) => {
+    req.collection.find((err, documentos) => {
+        if (err) return next(err);
+        res.json(documentos);
+    });
 });
 
-app.put("/api/product/:productID", (req, res) => {
-  const queProducto = req.body;
-  const productID = req.params.productID;
-
-  res.status(200);
-  res.send({mensaje: `Se ha modificado el producto ${productID}`,producto: queProducto,});
+// 3. Obtener un elemento específico por su ID
+app.get('/api/:coleccion/:id', (req, res, next) => {
+    req.collection.findOne({ _id: id(req.params.id) }, (err, elemento) => {
+        if (err) return next(err);
+        res.json(elemento);
+    });
 });
 
-app.delete("/api/product/:productID", (req, res) => {
-  const productID = req.params.productID;
+// 4. Insertar un nuevo elemento
+app.post('/api/:coleccion', (req, res, next) => {
+    const elemento = req.body;
 
-  res.status(200);
-  res.send({ mensaje: `Se ha eliminado el producto ${productID}`});
+    if (!elemento.nombre) {
+        res.status(400).json({
+            error: 'Bad data',
+            description: 'Se precisa al menos el campo "nombre"'
+        });
+    } else {
+        req.collection.save(elemento, (err, elementoGuardado) => {
+            if (err) return next(err);
+            res.json(elementoGuardado);
+        });
+    }
 });
 
-// Lanzamos nuestro servicio API
+// 5. Actualizar un elemento (por ID)
+app.put('/api/:coleccion/:id', (req, res, next) => {
+    const elementoId = req.params.id;
+    const elementoNuevo = req.body;
+
+    req.collection.update(
+        { _id: id(elementoId) },
+        { $set: elementoNuevo },
+        { safe: true, multi: false },
+        (err, resultado) => {
+            if (err) return next(err);
+            res.json(resultado);
+        }
+    );
+});
+
+// 6. Eliminar un elemento (por ID)
+app.delete('/api/:coleccion/:id', (req, res, next) => {
+    const elementoId = req.params.id;
+
+    req.collection.remove({ _id: id(elementoId) }, (err, resultado) => {
+        if (err) return next(err);
+        res.json(resultado);
+    });
+});
+
+// --- Inicio del Servidor ---
 app.listen(port, () => {
-  console.log(`API REST ejecutándose en http://localhost:${port}/api/product`);
+    console.log(`\n🚀 API REST funcionando en: http://localhost:${port}/api`);
+    console.log(`Uso: http://localhost:${port}/api/{nombre_coleccion}/{id_opcional}`);
 });

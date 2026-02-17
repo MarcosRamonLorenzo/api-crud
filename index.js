@@ -1,22 +1,75 @@
 'use strict';
 
-// --- Declaraciones y Configuración ---
+// Imports.
+const config = require('./config'); 
 const express = require('express');
 const logger = require('morgan');
 const mongojs = require('mongojs');
 
+const cors = require('cors'); 
+
+
+// Declaraciones.
+
 const app = express();
-const port = process.env.PORT || 3000;
+
+const port = config.PORT;
+const urlDB = config.DB;
+const accessToken = config.TOKEN;
+
 
 // Configuración de Base de Datos (Base de datos: "SD")
-var db = mongojs("mongodb://127.0.0.1:27017/SD");
+var db = mongojs(urlDB);
 const id = mongojs.ObjectID; 
 
-// --- Middlewares ---
-app.use(logger('dev')); 
-app.use(express.urlencoded({ extended: false })); 
-app.use(express.json()); 
+//Declaraciones.
 
+var allowCrossTokenOrigin = (req, res, next) => {
+
+    res.header("Access-Control-Allow-Origin", "*"); // Permiso a cualquier URL. Mejor acotar
+    return next();
+};
+
+var allowCrossTokenMethods = (req, res, next) => {
+
+    res.header("Access-Control-Allow-Methods", "*"); // Mejor acotar (GET,PUT,POST,DELETE)
+    return next();
+};
+
+var allowCrossTokenHeaders = (req, res, next) => {
+
+    res.header("Access-Control-Allow-Headers", "*"); // Mejor acotar
+    return next();
+};
+
+
+// --- Middlewares ---
+
+app.use(cors());
+app.use(allowCrossTokenOrigin);
+app.use(allowCrossTokenMethods);
+app.use(allowCrossTokenHeaders);
+
+app.use(logger('dev'));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+var auth = (req, res, next) => { // declaramos la función auth
+    
+    if (!req.headers.token) { // si no se envía el token...
+        res.status(401).json({ result: 'KO', msg: "Envía un código válido en la cabecera 'token'" });
+        return;
+    };
+
+    const queToken = req.headers.token; // recogemos el token de la cabecera llamada “token”
+
+    if (queToken === accessToken) { // si coincide con nuestro password...
+        return next(); // continuamos con la ejecución del código
+    } else { // en caso contrario...
+        res.status(401).json({ result: 'KO', msg: "No autorizado" });
+        return;
+    }
+};
 
 app.param("coleccion", (req, res, next, coleccion) => {
     console.log('Middleware param /api/:coleccion ->', coleccion);
@@ -51,24 +104,17 @@ app.get('/api/:coleccion/:id', (req, res, next) => {
 });
 
 // 4. Insertar un nuevo elemento
-app.post('/api/:coleccion', (req, res, next) => {
-    const elemento = req.body;
-
-    if (!elemento.nombre) {
-        res.status(400).json({
-            error: 'Bad data',
-            description: 'Se precisa al menos el campo "nombre"'
-        });
-    } else {
-        req.collection.save(elemento, (err, elementoGuardado) => {
-            if (err) return next(err);
-            res.json(elementoGuardado);
-        });
-    }
+app.post('/api/:coleccion', auth, (req, res, next) => {
+    const nuevoElemento = req.body;
+    
+    req.collection.save(nuevoElemento, (err, coleccionGuardada) => {
+        if (err) return next(err);
+        res.json(coleccionGuardada);
+    });
 });
 
 // 5. Actualizar un elemento (por ID)
-app.put('/api/:coleccion/:id', (req, res, next) => {
+app.put('/api/:coleccion/:id', auth, (req, res, next) => {
     const elementoId = req.params.id;
     const elementoNuevo = req.body;
 
@@ -84,7 +130,7 @@ app.put('/api/:coleccion/:id', (req, res, next) => {
 });
 
 // 6. Eliminar un elemento (por ID)
-app.delete('/api/:coleccion/:id', (req, res, next) => {
+app.delete('/api/:coleccion/:id', auth, (req, res, next) => {
     const elementoId = req.params.id;
 
     req.collection.remove({ _id: id(elementoId) }, (err, resultado) => {

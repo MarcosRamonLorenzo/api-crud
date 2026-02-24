@@ -29,15 +29,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/product",
-					"protocol": "http",
+					"raw": "https://localhost:4000/api",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "4000",
 					"path": [
-						"api",
-						"product"
+						"api"
 					]
 				},
 				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
@@ -50,16 +49,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/product/1",
-					"protocol": "http",
+					"raw": "https://localhost:4000/api/mascotas/699437cdeabfee1dd5e2dcae",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "4000",
 					"path": [
 						"api",
-						"product",
-						"1"
+						"mascotas",
+						"699437cdeabfee1dd5e2dcae"
 					]
 				}
 			},
@@ -85,42 +84,43 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "token",
+						"value": "password1234",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "urlencoded",
 					"urlencoded": [
 						{
-							"key": "name",
-							"value": "mi producto",
+							"key": "tipo",
+							"value": "pato",
 							"type": "text"
 						},
 						{
-							"key": "price",
-							"value": "200",
+							"key": "raza",
+							"value": "UA",
 							"type": "text"
 						},
 						{
-							"key": "photo",
-							"value": "miProducto.png",
-							"type": "text"
-						},
-						{
-							"key": "category",
-							"value": "general",
+							"key": "nombre",
+							"value": "cuajao",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/product",
-					"protocol": "http",
+					"raw": "https://localhost:4000/api/mascotas",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "4000",
 					"path": [
 						"api",
-						"product"
+						"mascotas"
 					]
 				},
 				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
@@ -131,28 +131,34 @@
 			"name": "/api/{coleccion}/{id}",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "token",
+						"value": "password1234",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "urlencoded",
 					"urlencoded": [
 						{
-							"key": "name",
-							"value": "CAMBIO",
+							"key": "nombre",
+							"value": "Frontiers",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/product/1",
-					"protocol": "http",
+					"raw": "https://localhost:4000/api/vinilo/698ef5a118bfcc141a34ef2e",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "4000",
 					"path": [
 						"api",
-						"product",
-						"1"
+						"vinilo",
+						"698ef5a118bfcc141a34ef2e"
 					]
 				}
 			},
@@ -162,18 +168,24 @@
 			"name": "/api/{coleccion}/{id}",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "token",
+						"value": "password1234",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "http://localhost:3000/api/product/1",
-					"protocol": "http",
+					"raw": "https://localhost:4000/api/libro/698ef49b18bfcc141a34ef2d",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "4000",
 					"path": [
 						"api",
-						"product",
-						"1"
+						"libro",
+						"698ef49b18bfcc141a34ef2d"
 					]
 				}
 			},

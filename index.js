@@ -5,6 +5,9 @@ const config = require('./config');
 const express = require('express');
 const logger = require('morgan');
 const mongojs = require('mongojs');
+const https = require('https'); 
+const fs = require('fs'); 
+const helmet = require('helmet'); 
 
 const cors = require('cors'); 
 
@@ -46,6 +49,7 @@ var allowCrossTokenHeaders = (req, res, next) => {
 // --- Middlewares ---
 
 app.use(cors());
+app.use(helmet());
 app.use(allowCrossTokenOrigin);
 app.use(allowCrossTokenMethods);
 app.use(allowCrossTokenHeaders);
@@ -140,7 +144,12 @@ app.delete('/api/:coleccion/:id', auth, (req, res, next) => {
 });
 
 // --- Inicio del Servidor ---
-app.listen(port, () => {
-    console.log(`\n🚀 API REST funcionando en: http://localhost:${port}/api`);
-    console.log(`Uso: http://localhost:${port}/api/{nombre_coleccion}/{id_opcional}`);
+// Lanzamos el servicio mediante un canal seguro
+https.createServer({
+
+    cert: fs.readFileSync('./cert/cert.pem'),
+    key: fs.readFileSync('./cert/key.pem')
+
+}, app).listen(port, function () {
+    console.log(`\n🚀 API REST funcionando en: https://localhost:${port}/api`);
 });

@@ -11,6 +11,9 @@ const helmet = require('helmet');
 
 const cors = require('cors'); 
 
+const AuthMiddleware = require('./middlewares/auth.middleware'); 
+
+
 
 // Declaraciones.
 
@@ -58,24 +61,8 @@ app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-var auth = (req, res, next) => { // declaramos la función auth
-    
-    if (!req.headers.token) { // si no se envía el token...
-        res.status(401).json({ result: 'KO', msg: "Envía un código válido en la cabecera 'token'" });
-        return;
-    };
 
-    const queToken = req.headers.token; // recogemos el token de la cabecera llamada “token”
-
-    if (queToken === accessToken) { // si coincide con nuestro password...
-        return next(); // continuamos con la ejecución del código
-    } else { // en caso contrario...
-        res.status(401).json({ result: 'KO', msg: "No autorizado" });
-        return;
-    }
-};
-
-app.param("coleccion", (req, res, next, coleccion) => {
+app.param("coleccion",AuthMiddleware.auth, (req, res, next, coleccion) => {
     console.log('Middleware param /api/:coleccion ->', coleccion);
     req.collection = db.collection(coleccion);
     return next();
@@ -84,7 +71,7 @@ app.param("coleccion", (req, res, next, coleccion) => {
 // --- Rutas de la API ---
 
 // 1. Listar todas las colecciones disponibles
-app.get('/api', (req, res, next) => {
+app.get('/api',AuthMiddleware.auth, (req, res, next) => {
     db.getCollectionNames((err, colecciones) => {
         if (err) return next(err);
         res.json(colecciones);
@@ -108,7 +95,7 @@ app.get('/api/:coleccion/:id', (req, res, next) => {
 });
 
 // 4. Insertar un nuevo elemento
-app.post('/api/:coleccion', auth, (req, res, next) => {
+app.post('/api/:coleccion', AuthMiddleware.auth , (req, res, next) => {
     const nuevoElemento = req.body;
     
     req.collection.save(nuevoElemento, (err, coleccionGuardada) => {
@@ -118,7 +105,7 @@ app.post('/api/:coleccion', auth, (req, res, next) => {
 });
 
 // 5. Actualizar un elemento (por ID)
-app.put('/api/:coleccion/:id', auth, (req, res, next) => {
+app.put('/api/:coleccion/:id', AuthMiddleware.auth, (req, res, next) => {
     const elementoId = req.params.id;
     const elementoNuevo = req.body;
 
@@ -134,7 +121,7 @@ app.put('/api/:coleccion/:id', auth, (req, res, next) => {
 });
 
 // 6. Eliminar un elemento (por ID)
-app.delete('/api/:coleccion/:id', auth, (req, res, next) => {
+app.delete('/api/:coleccion/:id', AuthMiddleware.auth, (req, res, next) => {
     const elementoId = req.params.id;
 
     req.collection.remove({ _id: id(elementoId) }, (err, resultado) => {

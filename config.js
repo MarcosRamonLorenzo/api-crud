@@ -1,6 +1,7 @@
 module.exports = {
  PORT: process.env.PORT || 4000,
- DB: process.env.MONGODB || 'mongodb+srv://marcossram31_db_user:u6uP8nB5Ax0YIUn4@cluster0.yqbecvf.mongodb.net/?appName=Cluster0',
- TOKEN: 'password1234'
+ DB: process.env.MONGODB || 'mongodb://127.0.0.1:27017/SD',
+ SECRET: 'miclavesecretadetokens',
+ TOKEN_EXP_TIME: 7*24*60 // 7 días expresados en minutos
 }
 

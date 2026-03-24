@@ -62,7 +62,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 
-app.param("coleccion",AuthMiddleware.auth, (req, res, next, coleccion) => {
+app.param("coleccion", (req, res, next, coleccion) => {
     console.log('Middleware param /api/:coleccion ->', coleccion);
     req.collection = db.collection(coleccion);
     return next();
@@ -79,7 +79,7 @@ app.get('/api',AuthMiddleware.auth, (req, res, next) => {
 });
 
 // 2. Listar todos los elementos de una colección
-app.get('/api/:coleccion', (req, res, next) => {
+app.get('/api/:coleccion',AuthMiddleware.auth, (req, res, next) => {
     req.collection.find((err, documentos) => {
         if (err) return next(err);
         res.json(documentos);
@@ -87,7 +87,7 @@ app.get('/api/:coleccion', (req, res, next) => {
 });
 
 // 3. Obtener un elemento específico por su ID
-app.get('/api/:coleccion/:id', (req, res, next) => {
+app.get('/api/:coleccion/:id',AuthMiddleware.auth, (req, res, next) => {
     req.collection.findOne({ _id: id(req.params.id) }, (err, elemento) => {
         if (err) return next(err);
         res.json(elemento);

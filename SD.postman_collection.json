@@ -26,6 +26,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2OWMyY2Q3NjM5NzNjYzI2NDJhMDBiMjEiLCJpYXQiOjE3NzQzNzQyNjIsImV4cCI6MTc3NDk3OTA2Mn0.BV95az7P-1_pYv6IrD2Bh32dRivTQRHi1xtzlM67O44",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -46,6 +56,16 @@
 		{
 			"name": "/api/{coleccion}/{id}",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2OWM3ZDBjNGJkNjhjNzVjNjY4ZDQ3YmEiLCJpYXQiOjE3NzQ3MDI4NzgsImV4cCI6MTc3NTMwNzY3OH0.Oj2bv2HsiJjhHhCJlydtlPWFDHU2duOIm828i1uoAak",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -83,33 +103,26 @@
 				}
 			],
 			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "password1234",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
+				"auth": {
+					"type": "bearer",
+					"bearer": [
 						{
-							"key": "tipo",
-							"value": "pato",
-							"type": "text"
-						},
-						{
-							"key": "raza",
-							"value": "UA",
-							"type": "text"
-						},
-						{
-							"key": "nombre",
-							"value": "cuajao",
-							"type": "text"
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2OWMyZDFmYmM3M2I0ZjJhYTZkNmJlMzAiLCJpYXQiOjE3NzQzNzU0MTksImV4cCI6MTc3NDk4MDIxOX0.yan3gbP8_aQVCTFw49qpVjbyMdJGYsDFy-t-JjvUtLw",
+							"type": "string"
 						}
 					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"tipo\":\"pato\",\n    \"raza\":\"UA\",\n    \"nombre\":\"loco\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
 					"raw": "https://localhost:4000/api/mascotas",
@@ -130,23 +143,26 @@
 		{
 			"name": "/api/{coleccion}/{id}",
 			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "token",
-						"value": "password1234",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
+				"auth": {
+					"type": "bearer",
+					"bearer": [
 						{
-							"key": "nombre",
-							"value": "Frontiers",
-							"type": "text"
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2OWM3ZDBjNGJkNjhjNzVjNjY4ZDQ3YmEiLCJpYXQiOjE3NzQ3MDI4NzgsImV4cCI6MTc3NTMwNzY3OH0.Oj2bv2HsiJjhHhCJlydtlPWFDHU2duOIm828i1uoAak",
+							"type": "string"
 						}
 					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"tipo\":\"pato\",\n    \"raza\":\"UA\",\n    \"nombre\":\"loco\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
 					"raw": "https://localhost:4000/api/vinilo/698ef5a118bfcc141a34ef2e",
@@ -167,14 +183,18 @@
 		{
 			"name": "/api/{coleccion}/{id}",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2OWMyYzEyMTRmMGE4ZTE5YzA0OTRjYjYiLCJpYXQiOjE3NzQzNzExMDUsImV4cCI6MTc3NDk3NTkwNX0.UN6MsIwUNsUAIN3JeQuIKs8tbhBDYasQs2SSBpA6h-A",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
-				"header": [
-					{
-						"key": "token",
-						"value": "password1234",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "https://localhost:4000/api/libro/698ef49b18bfcc141a34ef2d",
 					"protocol": "https",
